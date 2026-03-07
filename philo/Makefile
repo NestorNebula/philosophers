@@ -35,10 +35,13 @@ TESTS			= $(addprefix $(TEST_DIR)/, $(TESTS_FILES))
 TEST_EXECS		= $(TESTS:%.c=%.out)
 
 # ============== COMPILATION ===================================================
-CC		= @cc
-CFLAGS	= -Wall -Wextra -Werror
-IFLAGS	= -I$(INC_DIR)
-LFLAGS	=
+CC			= @cc
+CFLAGS		= -Wall -Wextra -Werror
+IFLAGS		= -I$(INC_DIR)
+LFLAGS		=
+CUT_DIR		= $(TEST_DIR)/cut
+CUT_INC_DIR	= $(CUT_DIR)/include
+CUT			= $(CUT_DIR)/libcut.a
 
 # ============== COMMANDS & FLAGS ==============================================
 NORMINETTE		= @norminette
@@ -115,12 +118,14 @@ checknorm:
 	$(NORMINETTE) $(SRC)
 	
 # ============== TESTS =========================================================
+$(CUT):
+	$(MAKE) -C $(CUT_DIR) --no-print-directory
 
-$(TEST_DIR)/%.o: %.c
-	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+$(TEST_DIR)/%.out: %.c
+	$(CC) $(CFLAGS) $(IFLAGS) -L $(CUT_DIR) -l cut -c $< -o $@
 	$(PRINTF) "$(CYAN)  Compiling: $(RESET)$<\n"
 
-test: $(TESTS)
+test: $(CUT) $(TESTS)
 	$(PRINTF) "\n$(CYAN)=====================================\n$(RESET)"
 	$(PRINTF) "	   $(BOLD)$(NAME)TESTS (normal mode)$(RESET)\n"
 	$(PRINTF) "$(CYAN)=====================================$(RESET)\n\n"
