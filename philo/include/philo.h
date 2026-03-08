@@ -6,7 +6,7 @@
 /*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 12:57:50 by nhoussie          #+#    #+#             */
-/*   Updated: 2026/03/06 16:03:20 by nhoussie         ###   ########.fr       */
+/*   Updated: 2026/03/08 08:40:35 by nhoussie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <pthread.h>
 # include <stddef.h>
+# include "context.h"
+# include "fork.h"
 
 typedef enum e_state
 {
@@ -23,22 +25,6 @@ typedef enum e_state
 	IS_THINKING,
 	IS_DEAD,
 }	t_state;
-
-typedef struct s_context
-{
-	bool			running;
-	long			start;
-	long			time_to_die;
-	long			time_to_eat;
-	long			time_to_sleep;
-	int				meal_target;
-	pthread_mutex_t	mutex;
-}	t_context;
-
-typedef struct s_fork
-{
-	pthread_mutex_t	mutex;
-}	t_fork;
 
 typedef struct s_philo
 {
@@ -49,6 +35,7 @@ typedef struct s_philo
 	size_t			meal_count;
 	t_fork			*forks[2];
 	t_context		*context;
+	pthread_mutex_t	mutex;
 }	t_philo;
 
 typedef struct s_master
@@ -58,5 +45,24 @@ typedef struct s_master
 	t_fork		*forks;
 	t_context	context;
 }	t_master;
+
+/**
+ * Initializes a philo structure. 
+ *
+ * @param philo A pointer to the philo structure to initialize
+ * @param number The number of the philo to initialize
+ * @param philo_master A pointer to the master structure that will
+ * handle the initialized philo structure
+ * @return 0 on success, > 0 on error
+ */
+int	init_philo(t_philo *philo, unsigned int number, t_master *philo_master);
+
+/**
+ * Clears the content inside a philo structure.
+ *
+ * @param A pointer to the philo structure to clear
+ * @return 0 on success, > 0 on error
+ */
+int	clear_philo(t_philo *philo);
 
 #endif // !PHILO_H
