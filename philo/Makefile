@@ -28,7 +28,7 @@ SRCS 			= $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 
 OBJS			= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
-TESTS_FILES		=
+TESTS_FILES		= init_test.c
 
 TESTS			= $(addprefix $(TEST_DIR)/, $(TESTS_FILES))
 
@@ -44,6 +44,8 @@ CUT_INC_DIR	= $(CUT_DIR)/include
 CUT			= $(CUT_DIR)/libcut.a
 
 # ============== COMMANDS & FLAGS ==============================================
+AR				= @ar
+ARFLAGS			= -r -c -s
 NORMINETTE		= @norminette
 RM 				= @rm
 RMFLAGS 		= -r -f
@@ -121,15 +123,17 @@ checknorm:
 $(CUT):
 	$(MAKE) -C $(CUT_DIR) --no-print-directory
 
-$(TEST_DIR)/%.out: %.c
-	$(CC) $(CFLAGS) $(IFLAGS) -L $(CUT_DIR) -l cut -c $< -o $@
+$(TEST_DIR)/%.out: $(TEST_DIR)/%.c $(OBJ)
+	$(AR) $(ARFLAGS) libphilo.a $(OBJ)
+	$(CC) $(CFLAGS) $(IFLAGS) -I$(CUT_INC_DIR) -L $(CUT_DIR) -l cut \
+		-l philo $< -o $@
 	$(PRINTF) "$(CYAN)  Compiling: $(RESET)$<\n"
 
-test: $(CUT) $(TESTS)
+test: $(CUT) $(TEST_EXECS)
 	$(PRINTF) "\n$(CYAN)=====================================\n$(RESET)"
 	$(PRINTF) "	   $(BOLD)$(NAME)TESTS (normal mode)$(RESET)\n"
 	$(PRINTF) "$(CYAN)=====================================$(RESET)\n\n"
-	for test in $(TEST_EXECS) ; do \
+	@for test in $(TEST_EXECS) ; do \
 		./$$test ; \
 	done
 
@@ -137,7 +141,7 @@ test_leaks:
 	$(PRINTF) "\n$(CYAN)=====================================\n$(RESET)"
 	$(PRINTF) "	   $(BOLD)$(NAME)TESTS (leaks mode)$(RESET)\n"
 	$(PRINTF) "$(CYAN)=====================================$(RESET)\n\n"
-	for test in $(TEST_EXECS) ; do \
+	@for test in $(TEST_EXECS) ; do \
 		$(VALGRIND) $(VALGRIND_FLAGS) ./$$test ; \
 	done
 
