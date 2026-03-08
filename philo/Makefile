@@ -1,17 +1,7 @@
 # ==============================================================================
 #                               PROJECT CONFIG
 # ==============================================================================
-NAME		= philo 
-
-# ============== COLORS ========================================================
-RESET		= \033[0m
-RED			= \033[0;31m
-GREEN		= \033[0;32m
-YELLOW		= \033[0;33m
-BLUE		= \033[0;34m
-CYAN		= \033[0;36m
-WHITE		= \033[0;37m
-BOLD		= \033[1m
+NAME	= philo 
 
 # ============== DIRECTORIES & LIBRARIES =======================================
 SRC_DIR			= src
@@ -35,7 +25,7 @@ TESTS			= $(addprefix $(TEST_DIR)/, $(TESTS_FILES))
 TEST_EXECS		= $(TESTS:%.c=%.out)
 
 # ============== COMPILATION ===================================================
-CC			= @cc
+CC			= cc
 CFLAGS		= -Wall -Wextra -Werror
 IFLAGS		= -I$(INC_DIR)
 LFLAGS		=
@@ -44,17 +34,13 @@ CUT_INC_DIR	= $(CUT_DIR)/include
 CUT			= $(CUT_DIR)/libcut.a
 
 # ============== COMMANDS & FLAGS ==============================================
-AR				= @ar
+AR				= ar
 ARFLAGS			= -r -c -s
 NORMINETTE		= @norminette
-RM 				= @rm
+RM 				= rm
 RMFLAGS 		= -r -f
 MKDIR			= @mkdir
 MKDIRFLAGS		= -p
-PRINTF			= @printf
-GREP			= @grep
-GREPFLAGS		= -r -n --color=always
-FIND			= @find
 VALGRIND		= valgrind
 VALGRIND_FLAGS	= --leak-check=full --show-leak-kinds=all --track-fds=yes \
 				  --track-origins=yes --trace-childrens=yes
@@ -67,29 +53,19 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(IFLAGS) $(LFLAGS) -o $(NAME)
-	$(PRINTF) "\n$(WHITE)=====================================\n$(RESET)"
-	$(PRINTF) "	   $(BOLD)$(GREEN)BUILD COMPLETE$(RESET)\n"
-	$(PRINTF) "$(WHITE)=====================================$(RESET)\n\n"
 
 $(OBJ_DIR)/%.o: %.c
 	$(MKDIR) $(MKDIRFLAGS) $(dir $@)
 	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
-	$(PRINTF) "$(CYAN)  Compiling: $(RESET)$<\n"
 
 # ============== CLEAN =========================================================
 
 clean:
 	$(RM) $(RMFLAGS) $(OBJ_DIR)
-	$(PRINTF) "\n$(WHITE)=====================================\n$(RESET)"
-	$(PRINTF) "	   $(BOLD)$(YELLOW)CLEAN COMPLETE$(RESET)\n"
-	$(PRINTF) "$(WHITE)=====================================$(RESET)\n\n"
 
 fclean:
 	$(RM) $(RMFLAGS) $(OBJ_DIR)
 	$(RM) $(RMFLAGS) $(NAME)
-	$(PRINTF) "\n$(WHITE)=====================================\n$(RESET)"
-	$(PRINTF) "	   $(BOLD)$(YELLOW)FCLEAN COMPLETE$(RESET)\n"
-	$(PRINTF) "$(WHITE)=====================================$(RESET)\n\n"
 
 re: fclean all
 
@@ -110,13 +86,7 @@ thread: fclean
 # ============== NORMINETTE ====================================================
 
 checknorm:
-	$(PRINTF) "\n$(CYAN)=====================================\n$(RESET)"
-	$(PRINTF) "	   $(BOLD)CHECK NORM INCLUDES$(RESET)\n"
-	$(PRINTF) "$(CYAN)=====================================$(RESET)\n\n"
 	$(NORMINETTE) $(INC_DIR)
-	$(PRINTF) "\n$(CYAN)=====================================\n$(RESET)"
-	$(PRINTF) "	   $(BOLD)CHECK NORM SRCS$(RESET)\n"
-	$(PRINTF) "$(CYAN)=====================================$(RESET)\n\n"
 	$(NORMINETTE) $(SRC_DIR)
 	
 # ============== TESTS =========================================================
@@ -127,29 +97,19 @@ $(TEST_DIR)/%.out: $(TEST_DIR)/%.c $(OBJ)
 	$(AR) $(ARFLAGS) libphilo.a $(OBJ)
 	$(CC) $(CFLAGS) $(IFLAGS) -I$(CUT_INC_DIR) -L $(CUT_DIR) -l cut \
 		-l philo $< -o $@
-	$(PRINTF) "$(CYAN)  Compiling: $(RESET)$<\n"
 
 test: $(CUT) $(TEST_EXECS)
-	$(PRINTF) "\n$(CYAN)=====================================\n$(RESET)"
-	$(PRINTF) "	   $(BOLD)$(NAME)TESTS (normal mode)$(RESET)\n"
-	$(PRINTF) "$(CYAN)=====================================$(RESET)\n\n"
 	@for test in $(TEST_EXECS) ; do \
 		./$$test ; \
 	done
 
-test_leaks:
-	$(PRINTF) "\n$(CYAN)=====================================\n$(RESET)"
-	$(PRINTF) "	   $(BOLD)$(NAME)TESTS (leaks mode)$(RESET)\n"
-	$(PRINTF) "$(CYAN)=====================================$(RESET)\n\n"
+test_leaks: $(CUT) $(TEST_EXECS)
 	@for test in $(TEST_EXECS) ; do \
 		$(VALGRIND) $(VALGRIND_FLAGS) ./$$test ; \
 	done
 
 fclean_test:
 	$(RM) $(RMFLAGS) $(TEST_EXECS)
-	$(PRINTF) "\n$(WHITE)=====================================\n$(RESET)"
-	$(PRINTF) "	   $(BOLD)$(YELLOW)FCLEAN TEST COMPLETE$(RESET)\n"
-	$(PRINTF) "$(WHITE)=====================================$(RESET)\n\n"
 
 .PHONY: all clean fclean re leaks leaks_supp sanitize thread checknorm test \
 	test_leaks fclean_test \
