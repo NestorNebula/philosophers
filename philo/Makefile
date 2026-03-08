@@ -115,7 +115,7 @@ checknorm:
 	$(PRINTF) "\n$(CYAN)=====================================\n$(RESET)"
 	$(PRINTF) "	   $(BOLD)CHECK NORM SRCS$(RESET)\n"
 	$(PRINTF) "$(CYAN)=====================================$(RESET)\n\n"
-	$(NORMINETTE) $(SRC)
+	$(NORMINETTE) $(SRC_DIR)
 	
 # ============== TESTS =========================================================
 $(CUT):
