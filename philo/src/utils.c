@@ -32,11 +32,11 @@ int	int_from_str(const char *str, int *int_ptr)
 	if (!is_digit(*str))
 		return (1);
 	nbr = 0;
-	while (is_digit(*str) && nbr <= INT_MAX - !is_negative)
+	while (is_digit(*str) && nbr <= (uint64_t) INT_MAX - !is_negative)
 		nbr = nbr * 10 + (*str++ - '0');
 	while (*str == ' ' || *str == '\t')
 		str++;
-	if (*str != '\0' || nbr > INT_MAX - !is_negative)
+	if (*str != '\0' || nbr > (uint64_t) INT_MAX - !is_negative)
 		return (1);
 	if (int_ptr != NULL && is_negative)
 		*int_ptr = -nbr;
