@@ -6,17 +6,17 @@ NAME	= philo
 # ============== DIRECTORIES & LIBRARIES =======================================
 SRC_DIR			= src
 INC_DIR			= include
-OBJ_DIR			= obj
+OBJ_DIR			= $(SRC_DIR)
 TEST_DIR		= test
 
 # ============== SUB-DIRECTORIES ===============================================
 
 # ============== FILES =========================================================
-SRCS_FILES		=
+SRCS_FILES		= context.c fork.c master.c philo.c
 
 SRCS 			= $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 
-OBJS			= $(SRCS:%.c=$(OBJ_DIR)/%.o)
+OBJS			= $(SRCS:%.c=%.o)
 
 TESTS_FILES		= init_test.c
 
@@ -54,17 +54,17 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(IFLAGS) $(LFLAGS) -o $(NAME)
 
-$(OBJ_DIR)/%.o: %.c
+%.o: %.c
 	$(MKDIR) $(MKDIRFLAGS) $(dir $@)
 	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 
 # ============== CLEAN =========================================================
 
 clean:
-	$(RM) $(RMFLAGS) $(OBJ_DIR)
+	# $(RM) $(RMFLAGS) $(OBJ_DIR)
 
 fclean:
-	$(RM) $(RMFLAGS) $(OBJ_DIR)
+	# $(RM) $(RMFLAGS) $(OBJ_DIR)
 	$(RM) $(RMFLAGS) $(NAME)
 
 re: fclean all
@@ -93,12 +93,11 @@ checknorm:
 $(CUT):
 	$(MAKE) -C $(CUT_DIR) --no-print-directory
 
-$(TEST_DIR)/%.out: $(TEST_DIR)/%.c $(OBJ)
-	$(AR) $(ARFLAGS) libphilo.a $(OBJ)
-	$(CC) $(CFLAGS) $(IFLAGS) -I$(CUT_INC_DIR) -L $(CUT_DIR) -l cut \
-		-l philo $< -o $@
+%.out: %.c $(CUT) $(OBJS)
+	$(AR) $(ARFLAGS) libphilo.a $(OBJS)
+	$(CC) $(CFLAGS) $< -o $@ $(IFLAGS) -I$(CUT_INC_DIR) -L$(CUT_DIR) -L. -lcut -lphilo 
 
-test: $(CUT) $(TEST_EXECS)
+test: $(TEST_EXECS)
 	@for test in $(TEST_EXECS) ; do \
 		./$$test ; \
 	done
@@ -110,6 +109,7 @@ test_leaks: $(CUT) $(TEST_EXECS)
 
 fclean_test:
 	$(RM) $(RMFLAGS) $(TEST_EXECS)
+	$(MAKE) -C $(CUT_DIR) fclean --no-print-directory
 
 .PHONY: all clean fclean re leaks leaks_supp sanitize thread checknorm test \
 	test_leaks fclean_test \
