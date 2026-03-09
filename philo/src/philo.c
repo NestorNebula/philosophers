@@ -10,18 +10,51 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <pthread.h>
 #include "philo.h"
+
+static void	*philo_routine(void *arg);
 
 int	init_philo(t_philo *philo, unsigned int number, t_master *philo_master)
 {
-	(void) philo;
-	(void) number;
-	(void) philo_master;
-	return (0);
+	int	rc;
+
+	if (philo == NULL || philo_master == NULL || number == 0)
+		return (1);
+	philo->state = IS_THINKING;
+	philo->number = number;
+	philo->last_meal = philo_master->context.start;
+	philo->meal_count = 0;
+	philo->forks[0] = &philo_master->forks[number - 1];
+	if (number == philo_master->philos_size)
+		philo->forks[1] = &philo_master->forks[0];
+	else
+		philo->forks[1] = &philo_master->forks[number];
+	philo->context = &philo_master->context;
+	if (pthread_mutex_lock(&philo->context->mutex) != 0)
+		return (1);
+	rc = 0;
+	if (pthread_create(&philo->thread, NULL, philo_routine, NULL) != 0)
+		rc = 1;
+	else if (pthread_mutex_init(&philo->mutex, NULL) != 0)
+		rc = 1;
+	if (rc != 0)
+	{
+		philo->context->running = 0;
+		pthread_join(philo->thread, NULL);
+	}
+	pthread_mutex_unlock(&philo->context->mutex);
+	return (rc);
 }
 
 int	clear_philo(t_philo *philo)
 {
-	(void) philo;
+	pthread_mutex_destroy(&philo->mutex);
+	pthread_join(philo->thread, NULL);
 	return (0);
+}
+
+static void	*philo_routine(void *arg)
+{
+	return (arg);
 }
