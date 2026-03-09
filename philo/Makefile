@@ -12,7 +12,7 @@ TEST_DIR		= test
 # ============== SUB-DIRECTORIES ===============================================
 
 # ============== FILES =========================================================
-SRCS_FILES		= context.c fork.c master.c philo.c
+SRCS_FILES		= context.c fork.c master.c philo.c utils.c
 
 SRCS 			= $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 
@@ -43,7 +43,7 @@ MKDIR			= @mkdir
 MKDIRFLAGS		= -p
 VALGRIND		= valgrind
 VALGRIND_FLAGS	= --leak-check=full --show-leak-kinds=all --track-fds=yes \
-				  --track-origins=yes --trace-childrens=yes
+				  --track-origins=yes --trace-children=yes
 
 # ==============================================================================
 #                                 RULES
