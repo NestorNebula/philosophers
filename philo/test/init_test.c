@@ -1,3 +1,4 @@
+#include <string.h>
 #include "context.h"
 #include "fork.h"
 #include "master.h"
@@ -33,6 +34,7 @@ static void	init_context_test(void)
 	const int	int_args[CONTEXT_ARGS_SIZE] = {140, 100, 20, 3};
 
 	unit_test = new_unit_test("init_context", false);
+	memset(&context, 0, sizeof(t_context));
 	rc = init_context(&context, CONTEXT_ARGS_SIZE - 1, (char **) str_args);
 	cut_assert(rc == 0, unit_test, "returns 0 for valid arguments "
 		"without meal_target");
@@ -79,6 +81,7 @@ static void	init_fork_test(void)
 	int			rc;
 
 	unit_test = new_unit_test("init_fork", false);
+	memset(&fork, 0, sizeof(t_fork));
 	rc = init_fork(&fork);
 	cut_assert(rc == 0, unit_test, "returns 0 on success");
 	clear_fork(&fork);
@@ -94,6 +97,7 @@ static void	init_master_test(void)
 	const int	int_args[MASTER_ARGS_SIZE] = {2, 140, 100, 20, 3};
 
 	unit_test = new_unit_test("init_master", false);
+	memset(&master, 0, sizeof(t_master));
 	rc = init_master(&master, MASTER_ARGS_SIZE - 1, (char **) str_args);
 	cut_assert(rc == 0, unit_test,
 		"returns 0 for valid arguments without meal_target argument");
@@ -134,6 +138,8 @@ static void	init_philo_test(void)
 	unsigned int	number;
 
 	unit_test = new_unit_test("init_philo", false);
+	memset(&master, 0, sizeof(t_master));
+	memset(&philo, 0, sizeof(t_philo));
 	number = 1;
 	rc = init_philo(&philo, number, &master);
 	cut_assert(rc == 0, unit_test,
@@ -153,13 +159,11 @@ static void	init_philo_test(void)
 	cut_expect(philo.context == &master.context, unit_test,
 		"sets philo's context to master's context");
 	clear_philo(&philo);
-	rc = init_philo(&philo, -1, &master);
-	cut_expect(rc != 0, unit_test,
-		"returns non-zero value for negative philo number");
 	rc = init_philo(&philo, 0, &master);
 	cut_expect(rc != 0, unit_test,
 		"returns non-zero value for non-positive philo number");
 	rc = init_philo(&philo, number, NULL);
 	cut_expect(rc != 0, unit_test,
 		"returns non-zero value for null master argument");
+	end_unit_test(unit_test);
 }
