@@ -6,7 +6,7 @@ NAME	= philo
 # ============== DIRECTORIES & LIBRARIES =======================================
 SRC_DIR			= src
 INC_DIR			= include
-OBJ_DIR			= $(SRC_DIR)
+OBJ_DIR			= obj
 TEST_DIR		= test
 
 # ============== SUB-DIRECTORIES ===============================================
@@ -16,7 +16,9 @@ SRCS_FILES		= context.c fork.c master.c philo.c utils.c
 
 SRCS 			= $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 
-OBJS			= $(SRCS:%.c=%.o)
+OBJS_FILES		= $(SRCS_FILES:%.c=%.o)
+
+OBJS			= $(addprefix $(OBJ_DIR)/, $(OBJS_FILES))
 
 TESTS_FILES		= init_test.c
 
@@ -54,17 +56,17 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(IFLAGS) $(LFLAGS) -o $(NAME)
 
-%.o: %.c
-	$(MKDIR) $(MKDIRFLAGS) $(dir $@)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	$(MKDIR) $(MKDIRFLAGS) $(OBJ_DIR)
 	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 
 # ============== CLEAN =========================================================
 
 clean:
-	# $(RM) $(RMFLAGS) $(OBJ_DIR)
+	$(RM) $(RMFLAGS) $(OBJ_DIR)
 
 fclean:
-	# $(RM) $(RMFLAGS) $(OBJ_DIR)
+	$(RM) $(RMFLAGS) $(OBJ_DIR)
 	$(RM) $(RMFLAGS) $(NAME)
 
 re: fclean all
