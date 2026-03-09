@@ -12,7 +12,7 @@ TEST_DIR		= test
 # ============== SUB-DIRECTORIES ===============================================
 
 # ============== FILES =========================================================
-SRCS_FILES		= context.c fork.c master.c philo.c utils.c
+SRCS_FILES		= context.c fork.c master.c philo.c utils.c action.c
 
 SRCS 			= $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 
