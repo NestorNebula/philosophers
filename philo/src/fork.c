@@ -10,16 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <pthread.h>
 #include "fork.h"
 
 int	init_fork(t_fork *fork)
 {
-	(void) fork;
-	return (0);
+	if (fork == NULL)
+		return (1);
+	return (pthread_mutex_init(&fork->mutex, NULL));
 }
 
 int	clear_fork(t_fork *fork)
 {
-	(void) fork;
-	return (0);
+	return (pthread_mutex_destroy(&fork->mutex));
 }
