@@ -6,12 +6,13 @@
 /*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 08:19:27 by nhoussie          #+#    #+#             */
-/*   Updated: 2026/03/09 11:44:15 by nhoussie         ###   ########.fr       */
+/*   Updated: 2026/03/10 13:35:30 by nhoussie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include <stdint.h>
+#include <string.h>
 #include "context.h"
 #include "utils.h"
 
@@ -25,8 +26,9 @@ int	init_context(t_context *context, size_t args_size, char **args)
 	if (context == NULL || args == NULL
 		|| args_size < ARGS_MIN || args_size > ARGS_MAX)
 		return (1);
+	memset(context, 0, sizeof(t_context)); 
 	context->running = true;
-	context->start = time_now(&context->start);
+	context->start = time_now() + 100000000;
 	if (int_from_str(args[0], (int *) &context->time_to_die) != 0
 		|| int_from_str(args[1], (int *) &context->time_to_eat) != 0
 		|| int_from_str(args[2], (int *) &context->time_to_sleep) != 0)
