@@ -53,11 +53,10 @@ int	clear_master(t_master *master)
 
 	i = 0;
 	while (i < master->philos_size)
-	{
-		clear_philo(&master->philos[i]);
-		clear_fork(&master->forks[i]);
-		i++;
-	}
+		clear_philo(&master->philos[i++]);
+	i = 0;
+	while (i < master->philos_size)
+		clear_fork(&master->forks[i++]);
 	clear_context(&master->context);
 	free(master->philos);
 	free(master->forks);
