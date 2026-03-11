@@ -48,8 +48,14 @@ int	is_digit(int c);
  * @return The number of milliseconds since Epoch on success, -1 on error
  */
 long	time_now(void);
+
+/**
+ * Sleeps for a minimum number of microseconds.
+ *
+ * @param l The minimum number of microseconds to sleep
+ * @return 0 on success, -1 on error
  */
-int	time_now(long *time_ptr);
+int	ft_usleep(long l);
 
 /**
  * Prints an action executed by a philo.

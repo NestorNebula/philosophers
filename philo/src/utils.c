@@ -59,9 +59,25 @@ long	time_now(void)
 		return (-1);
 	return (tv.tv_sec * 1000000 + tv.tv_usec);
 }
+
+int	ft_usleep(long l)
+{
+	long	start;
+	long	time;
+
+	if (l < 0)
 		return (1);
-	now = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-	if (time_ptr != NULL)
-		*time_ptr = now;
+	start = time_now();
+	time = start;
+	if (l > 1000)
+	{
+		usleep(l - 1000);
+		time = time_now();
+	}
+	while (time - start < l)
+	{
+		usleep(100);
+		time = time_now();
+	}
 	return (0);
 }
