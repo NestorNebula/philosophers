@@ -6,7 +6,7 @@
 /*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 16:59:36 by nhoussie          #+#    #+#             */
-/*   Updated: 2026/03/09 17:30:01 by nhoussie         ###   ########.fr       */
+/*   Updated: 2026/03/10 11:51:30 by nhoussie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,25 @@
 #define MAX_MSG_LEN 100
 #define MAX_LONG_LEN 20
 
+/* TODO Check state before printing */
+
 static void	str_from_long(long l, char *str);
 
 static void copy_string(char *dest, const char *src);
 
 static int	copy_action(t_action action, char *msg);
 
-int	print_action(t_action action, t_philo *philo)
+int	print_action(t_action action, long time, t_philo *philo)
 {
 	char	msg[MAX_MSG_LEN + 1];
 	size_t	msg_len;
-	long	time;
+	bool	running;
 
 	if (philo == NULL)
 		return (1);
 	msg_len = 0;
 	msg[msg_len] = '\0';
-	if (time_now(&time) != 0)
-		return (1);
-	str_from_long(time, msg + msg_len);
+	str_from_long((time - philo->context->start) / 1000, msg + msg_len);
 	while (msg[msg_len] != '\0')
 		msg_len++;
 	msg[msg_len++] = ' ';
@@ -45,7 +45,10 @@ int	print_action(t_action action, t_philo *philo)
 		return (1);
 	while (msg[msg_len] != '\0')
 		msg_len++;
-	return (write(STDIN_FILENO, msg, msg_len) != (int) msg_len);
+	get_running(philo->context, &running);
+	if (running)
+		return (write(STDOUT_FILENO, msg, msg_len) != (int) msg_len);
+	return (0);
 }
 
 static void	str_from_long(long l, char *str)

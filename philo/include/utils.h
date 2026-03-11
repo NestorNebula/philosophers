@@ -6,7 +6,7 @@
 /*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 10:49:21 by nhoussie          #+#    #+#             */
-/*   Updated: 2026/03/09 11:44:09 by nhoussie         ###   ########.fr       */
+/*   Updated: 2026/03/10 11:30:23 by nhoussie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,10 @@ int	time_now(long *time_ptr);
  * Prints an action executed by a philo.
  *
  * @param action An action
+ * @param time The time to print for the action
  * @param philo A pointer to a philo structure
  * @return 0 on success, > 0 on error
  */
-int	print_action(t_action action, t_philo *philo);
+int	print_action(t_action action, long time, t_philo *philo);
 
 #endif // !UTILS_H
