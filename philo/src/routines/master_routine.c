@@ -1,0 +1,74 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   master_routine.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/10 09:34:18 by nhoussie          #+#    #+#             */
+/*   Updated: 2026/03/10 13:38:13 by nhoussie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "context.h"
+#include "master.h"
+#include "utils.h"
+
+#include <stdio.h>
+
+static int	check_philos(t_master *master);
+
+static int	check_philo(t_master *master, t_philo *philo, size_t *reached);
+
+void	*master_routine(void *arg)
+{
+	t_master	*master;
+	bool		running;
+
+	master = arg;
+	if (master == NULL)
+		return (NULL);
+	while (get_running(&master->context, &running) == 0 && running)
+	{
+		if (check_philos(master) != 0)
+			set_running(&master->context, false);
+	}
+	return (NULL);
+}
+
+static int	check_philos(t_master *master)
+{
+	size_t	reached;
+	size_t	i;
+	bool	stop;
+
+	reached = 0;
+	i = 0;
+	stop = false;
+	while (i < master->philos_size && !stop)
+	{
+		stop = check_philo(master, master->philos + i, &reached) != 0;
+		i++;
+	}
+	return (stop || reached == master->philos_size);
+}
+
+static int	check_philo(t_master *master, t_philo *philo, size_t *reached)
+{
+	size_t	meal_count;
+	long	time;
+	long	last_meal;
+
+	get_last_meal(philo, &last_meal);
+	get_meal_count(philo, &meal_count);
+	time = time_now();
+	if (time - last_meal > master->context.time_to_die * 1000)
+	{
+		print_action(A_DIED, time, philo);
+		return (1);
+	}
+	if (master->context.meal_target > 0
+		&& (int) meal_count >= master->context.meal_target)
+		(*reached)++;
+	return (0);
+}
