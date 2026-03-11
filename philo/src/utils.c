@@ -6,7 +6,7 @@
 /*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 11:39:52 by nhoussie          #+#    #+#             */
-/*   Updated: 2026/03/09 11:44:11 by nhoussie         ###   ########.fr       */
+/*   Updated: 2026/03/10 11:44:03 by nhoussie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <unistd.h>
 #include "utils.h"
 
 int	int_from_str(const char *str, int *int_ptr)
@@ -50,12 +51,14 @@ int	is_digit(int c)
 	return (c >= '0' && c <= '9');
 }
 
-int	time_now(long *time_ptr)
+long	time_now(void)
 {
-	long			now;
 	struct timeval	tv;
 	
 	if (gettimeofday(&tv, NULL) == -1)
+		return (-1);
+	return (tv.tv_sec * 1000000 + tv.tv_usec);
+}
 		return (1);
 	now = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 	if (time_ptr != NULL)

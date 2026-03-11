@@ -45,8 +45,9 @@ int	is_digit(int c);
 /**
  * Gets the current number of milliseconds since Epoch.
  *
- * @param time_ptr A pointer to a variable where the time can be stored
- * @return 0 on success, > 0 on error
+ * @return The number of milliseconds since Epoch on success, -1 on error
+ */
+long	time_now(void);
  */
 int	time_now(long *time_ptr);
 
