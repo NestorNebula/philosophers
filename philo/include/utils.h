@@ -31,7 +31,7 @@ typedef enum e_action
  * @param A pointer to an integer where the integer read can be stored
  * @return 0 on success, > 0 on error
  */
-int	int_from_str(const char *str, int *int_ptr);
+int		int_from_str(const char *str, int *int_ptr);
 
 /**
  * Checks if an integer corresponds to an hexadecimal character.
@@ -40,7 +40,7 @@ int	int_from_str(const char *str, int *int_ptr);
  * @return > 0 if the given integer corresponds to an hexadecimal character,
  * 0 otherwise
  */
-int	is_digit(int c);
+int		is_digit(int c);
 
 /**
  * Gets the current number of milliseconds since Epoch.
@@ -55,7 +55,7 @@ long	time_now(void);
  * @param l The minimum number of microseconds to sleep
  * @return 0 on success, -1 on error
  */
-int	ft_usleep(long l);
+int		ft_usleep(long l);
 
 /**
  * Prints an action executed by a philo.
@@ -65,6 +65,6 @@ int	ft_usleep(long l);
  * @param philo A pointer to a philo structure
  * @return 0 on success, > 0 on error
  */
-int	print_action(t_action action, long time, t_philo *philo);
+int		print_action(t_action action, long time, t_philo *philo);
 
 #endif // !UTILS_H
