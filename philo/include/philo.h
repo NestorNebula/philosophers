@@ -55,7 +55,15 @@ typedef struct s_master
  * handle the initialized philo structure
  * @return 0 on success, > 0 on error
  */
-int	init_philo(t_philo *philo, unsigned int number, t_master *philo_master);
+int		init_philo(t_philo *philo, unsigned int number, t_master *philo_master);
+
+/**
+ * The routine function for a philo thread.
+ *
+ * @param arg A pointer to a philo structure
+ * @return A null pointer
+ */
+void	*philo_routine(void *arg);
 
 /**
  * Clears the content inside a philo structure.
