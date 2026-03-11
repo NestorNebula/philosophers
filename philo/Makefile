@@ -10,21 +10,34 @@ OBJ_DIR			= obj
 TEST_DIR		= test
 
 # ============== SUB-DIRECTORIES ===============================================
+GETTERS_PATH	= $(SRC_DIR)/getters
+ROUTINES_PATH	= $(SRC_DIR)/routines
+SETTERS_PATH	= $(SRC_DIR)/setters
 
 # ============== FILES =========================================================
-SRCS_FILES		= context.c fork.c master.c philo.c utils.c action.c
+SRC_ROOT_FILES		= action.c context.c fork.c main.c master.c philo.c \
+					  utils.c
 
-SRCS 			= $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
+GETTERS_FILES		= context_getters.c philo_getters.c
 
-OBJS_FILES		= $(SRCS_FILES:%.c=%.o)
+ROUTINES_FILES		= master_routine.c philo_routine.c
 
-OBJS			= $(addprefix $(OBJ_DIR)/, $(OBJS_FILES))
+SETTERS_FILES		= context_setters.c philo_setters.c
 
-TESTS_FILES		= init_test.c
+SRCS 				= $(addprefix $(SRC_DIR)/, $(SRC_ROOT_FILES)) \
+					  $(addprefix $(GETTERS_PATH)/, $(GETTERS_FILES)) \
+					  $(addprefix $(ROUTINES_PATH)/, $(ROUTINES_FILES)) \
+					  $(addprefix $(SETTERS_PATH)/, $(SETTERS_FILES))
 
-TESTS			= $(addprefix $(TEST_DIR)/, $(TESTS_FILES))
+OBJS_FILES			= $(SRCS_FILES:%.c=%.o)
 
-TEST_EXECS		= $(TESTS:%.c=%.out)
+OBJS				= $(SRCS:%.c=$(OBJ_DIR)/%.o)
+
+TESTS_FILES			= init_test.c
+
+TESTS				= $(addprefix $(TEST_DIR)/, $(TESTS_FILES))
+
+TEST_EXECS			= $(TESTS:%.c=%.out)
 
 # ============== COMPILATION ===================================================
 CC			= cc
@@ -56,8 +69,8 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(IFLAGS) $(LFLAGS) -o $(NAME)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(MKDIR) $(MKDIRFLAGS) $(OBJ_DIR)
+$(OBJ_DIR)/%.o: %.c
+	$(MKDIR) $(MKDIRFLAGS) $(dir $@)
 	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 
 # ============== CLEAN =========================================================
@@ -97,7 +110,7 @@ $(CUT):
 
 %.out: %.c $(CUT) $(OBJS)
 	$(AR) $(ARFLAGS) libphilo.a $(OBJS)
-	$(CC) $(CFLAGS) $< -o $@ $(IFLAGS) -I$(CUT_INC_DIR) -L$(CUT_DIR) -L. -lcut -lphilo 
+	$(CC) $(CFLAGS) $< -o $@ $(IFLAGS) -I$(CUT_INC_DIR) -L$(CUT_DIR) -L. -lcut -lphilo
 
 test: $(TEST_EXECS)
 	@for test in $(TEST_EXECS) ; do \
