@@ -21,7 +21,8 @@ static int	init_philos_and_forks(t_master *master);
 
 int	init_master(t_master *master, size_t args_size, char **args)
 {
-	int	philos_number;
+	int		philos_number;
+	long	time;
 
 	if (master == NULL || args == NULL
 		|| args_size < ARGS_MIN || args_size > ARGS_MAX)
@@ -41,6 +42,8 @@ int	init_master(t_master *master, size_t args_size, char **args)
 		free(master->forks);
 		return (1);
 	}
+	time = time_now();
+	set_start(&master->context, time);
 	return (0);
 }
 
