@@ -16,11 +16,9 @@
 #define MAX_MSG_LEN 100
 #define MAX_LONG_LEN 20
 
-/* TODO Check state before printing */
-
 static void	str_from_long(long l, char *str);
 
-static void copy_string(char *dest, const char *src);
+static void	copy_string(char *dest, const char *src);
 
 static int	copy_action(t_action action, char *msg);
 
@@ -65,7 +63,7 @@ static void	str_from_long(long l, char *str)
 	nbr_str_len = 0;
 	if (l < 0)
 		*str++ = '-';
-	while (l != 0 )
+	while (l != 0)
 	{
 		nbr_str[nbr_str_len++] = '0' + (l % 10);
 		l /= 10;
@@ -76,7 +74,7 @@ static void	str_from_long(long l, char *str)
 	return ;
 }
 
-static void copy_string(char *dest, const char *src)
+static void	copy_string(char *dest, const char *src)
 {
 	size_t	i;
 

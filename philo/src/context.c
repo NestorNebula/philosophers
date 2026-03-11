@@ -26,7 +26,7 @@ int	init_context(t_context *context, size_t args_size, char **args)
 	if (context == NULL || args == NULL
 		|| args_size < ARGS_MIN || args_size > ARGS_MAX)
 		return (1);
-	memset(context, 0, sizeof(t_context)); 
+	memset(context, 0, sizeof(t_context));
 	context->running = true;
 	context->start = time_now() + 100000000;
 	if (int_from_str(args[0], (int *) &context->time_to_die) != 0

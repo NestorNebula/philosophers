@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-int		get_last_meal(t_philo *philo, long *last_meal)
+int	get_last_meal(t_philo *philo, long *last_meal)
 {
 	if (philo == NULL || last_meal == NULL)
 		return (1);
@@ -22,7 +22,7 @@ int		get_last_meal(t_philo *philo, long *last_meal)
 	return (pthread_mutex_unlock(&philo->mutex));
 }
 
-int		get_meal_count(t_philo *philo, size_t *meal_count)
+int	get_meal_count(t_philo *philo, size_t *meal_count)
 {
 	if (philo == NULL || meal_count == NULL)
 		return (1);
