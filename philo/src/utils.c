@@ -54,7 +54,7 @@ int	is_digit(int c)
 long	time_now(void)
 {
 	struct timeval	tv;
-	
+
 	if (gettimeofday(&tv, NULL) == -1)
 		return (-1);
 	return (tv.tv_sec * 1000000 + tv.tv_usec);

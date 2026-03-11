@@ -20,19 +20,15 @@ static int	philo_eat(t_philo *philo);
 
 static int	grab_forks(t_philo *philo, t_fork *first_fork, t_fork *second_fork);
 
-#include <stdio.h>
-
 void	*philo_routine(void *arg)
 {
 	t_philo	*philo;
 	int		rc;
 	bool	running;
-	long	time;
 
 	philo = arg;
 	if (philo == NULL)
 		return (NULL);
-	time = time_now();
 	wait_start(philo);
 	rc = get_running(philo->context, &running);
 	while (rc == 0 && running)
@@ -42,11 +38,9 @@ void	*philo_routine(void *arg)
 			rc = 1;
 			break ;
 		}
-		time = time_now();
-		print_action(A_SLEEPING, time, philo);
+		print_action(A_SLEEPING, time_now(), philo);
 		ft_usleep(philo->context->time_to_sleep * 1000);
-		time = time_now();
-		print_action(A_THINKING, time, philo);
+		print_action(A_THINKING, time_now(), philo);
 		ft_usleep(1000);
 		rc = get_running(philo->context, &running);
 	}
@@ -104,7 +98,8 @@ static int	grab_forks(t_philo *philo, t_fork *first_fork, t_fork *second_fork)
 		return (1);
 	time = time_now();
 	print_action(A_FORK, time, philo);
-	if (second_fork == first_fork || pthread_mutex_lock(&second_fork->mutex) != 0)
+	if (second_fork == first_fork
+		|| pthread_mutex_lock(&second_fork->mutex) != 0)
 	{
 		pthread_mutex_unlock(&first_fork->mutex);
 		return (1);
