@@ -6,7 +6,7 @@
 /*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 12:57:50 by nhoussie          #+#    #+#             */
-/*   Updated: 2026/03/08 08:40:35 by nhoussie         ###   ########.fr       */
+/*   Updated: 2026/03/10 09:03:33 by nhoussie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,42 @@ int	init_philo(t_philo *philo, unsigned int number, t_master *philo_master);
  * @param A pointer to the philo structure to clear
  * @return 0 on success, > 0 on error
  */
-int	clear_philo(t_philo *philo);
+int		clear_philo(t_philo *philo);
+
+/**
+ * Sets a philo's last meal to the given value.
+ *
+ * @param philo A pointer to a philo structure
+ * @param last_meal The value to set
+ * @return 0 on success, > on error
+ */
+int		set_last_meal(t_philo *philo, long last_meal);
+
+/**
+ * Gets a philo's last meal.
+ *
+ * @param philo A pointer to a philo structure
+ * @param last_meal A pointer to a variable where the value can be stored
+ * @return 0 on success, > 0 on error
+ */
+int		get_last_meal(t_philo *philo, long *last_meal);
+
+/**
+ * Sets a philo's meal count to the given value.
+ *
+ * @param philo A pointer to a philo structure
+ * @param meal_count The value to set
+ * @return 0 on success, > on error
+ */
+int		set_meal_count(t_philo *philo, size_t meal_count);
+
+/**
+ * Gets a philo's meal count.
+ *
+ * @param philo A pointer to a philo structure
+ * @param meal_count A pointer to a variable where the value can be stored
+ * @return 0 on success, > 0 on error
+ */
+int		get_meal_count(t_philo *philo, size_t *meal_count);
 
 #endif // !PHILO_H
