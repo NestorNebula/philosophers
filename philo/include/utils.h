@@ -54,9 +54,8 @@ long	time_now(void);
  * Sleeps for a minimum number of microseconds.
  *
  * @param l The minimum number of microseconds to sleep
- * @return 0 on success, -1 on error
  */
-int		ft_usleep(long l);
+void	ft_usleep(long l);
 
 /**
  * Prints an action executed by a philo.
