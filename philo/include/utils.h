@@ -6,23 +6,12 @@
 /*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 10:49:21 by nhoussie          #+#    #+#             */
-/*   Updated: 2026/03/10 11:30:23 by nhoussie         ###   ########.fr       */
+/*   Updated: 2026/03/13 09:18:55 by nhoussie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
-
-# include "philo.h"
-
-typedef enum e_action
-{
-	A_FORK,
-	A_EATING,
-	A_SLEEPING,
-	A_THINKING,
-	A_DIED,
-}	t_action;
 
 /**
  * Reads an integer from a string.
@@ -56,14 +45,5 @@ long	time_now(void);
  * @param l The minimum number of microseconds to sleep
  */
 void	ft_usleep(long l);
-
-/**
- * Prints an action executed by a philo.
- *
- * @param action An action
- * @param philo A pointer to a philo structure
- * @return 0 on success, > 0 on error
- */
-int		print_action(t_action action, t_philo *philo);
 
 #endif // !UTILS_H
