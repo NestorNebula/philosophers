@@ -6,29 +6,34 @@
 /*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 16:59:36 by nhoussie          #+#    #+#             */
-/*   Updated: 2026/03/10 11:51:30 by nhoussie         ###   ########.fr       */
+/*   Updated: 2026/03/13 10:01:08 by nhoussie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include <stdio.h>
+#include "action.h"
 #include "utils.h"
 
 static void	set_action_msg(t_action action, char **msg);
 
-int	print_action(t_action action, t_philo *philo)
+int		act(t_action action, t_philo *philo)
 {
-	char	*msg;
 	int		rc;
+	char	*msg;
+	long	time;
 
 	if (philo == NULL)
 		return (1);
-	if (pthread_mutex_lock(&philo->context->mutex) != 0)
-		return (1);
 	msg = NULL;
 	set_action_msg(action, &msg);
+	if (pthread_mutex_lock(&philo->context->mutex) != 0)
+		return (1);
+	time = time_now();
+	if (action == A_EATING)
+		set_last_meal(philo, time);
 	if (msg && philo->context->running)
-		printf("%ld %d %s\n", (time_now() - philo->context->start) / 1000,
+		printf("%ld %d %s\n", (time - philo->context->start) / 1000,
 			philo->number, msg);
 	if (action == A_DIED)
 		philo->context->running = false;
