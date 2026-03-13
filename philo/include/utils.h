@@ -27,11 +27,12 @@ typedef enum e_action
 /**
  * Reads an integer from a string.
  *
- * @param A pointer to a string
- * @param A pointer to an integer where the integer read can be stored
- * @return 0 on success, > 0 on error
+ * @param str A pointer to a string
+ * @param err A pointer to a boolean that will be set to true
+ * if an error occurs
+ * @return The integer read on success, an undefined integer on error
  */
-int		int_from_str(const char *str, int *int_ptr);
+int		int_from_str(const char *str, bool *err);
 
 /**
  * Checks if an integer corresponds to an hexadecimal character.
