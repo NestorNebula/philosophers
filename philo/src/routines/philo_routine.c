@@ -18,31 +18,22 @@ static void	wait_start(t_philo *philo);
 
 static int	philo_eat(t_philo *philo);
 
-static int	grab_forks(t_philo *philo, t_fork *first_fork, t_fork *second_fork);
+static int	grab_forks(t_philo *philo);
 
 void	*philo_routine(void *arg)
 {
 	t_philo	*philo;
-	int		rc;
-	bool	running;
 
 	philo = arg;
 	if (philo == NULL)
 		return (NULL);
 	wait_start(philo);
-	rc = get_running(philo->context, &running);
-	while (rc == 0 && running)
+	while (philo_eat(philo) == 0)
 	{
-		if (philo_eat(philo) != 0)
-		{
-			rc = 1;
-			break ;
-		}
-		print_action(A_SLEEPING, time_now(), philo);
 		ft_usleep(philo->context->time_to_sleep * 1000);
-		print_action(A_THINKING, time_now(), philo);
+		if (print_action(A_THINKING, philo) != 0)
+			break ;
 		ft_usleep(1000);
-		rc = get_running(philo->context, &running);
 	}
 	return (NULL);
 }
@@ -61,50 +52,42 @@ static void	wait_start(t_philo *philo)
 		get_start(philo->context, &start);
 	}
 	set_last_meal(philo, start);
+	print_action(A_THINKING, philo);
+	if ((philo->number % 2) == 0)
+	{
+		ft_usleep(philo->context->time_to_eat * 1000);
+	}
 }
 
 static int	philo_eat(t_philo *philo)
 {
-	t_fork	*first_fork;
-	t_fork	*second_fork;
-	long	time;
-	size_t	meal_count;
+	int	rc;
 
-	first_fork = philo->forks[0];
-	second_fork = philo->forks[1];
-	if ((philo->number % 2) == 0)
-	{
-		first_fork = philo->forks[1];
-		second_fork = philo->forks[0];
-	}
-	if (grab_forks(philo, first_fork, second_fork) != 0)
+	rc = 0;
+	if (grab_forks(philo) != 0)
 		return (1);
-	time = time_now();
-	set_last_meal(philo, time);
-	print_action(A_EATING, time, philo);
+	increase_meal_count(philo);
+	if (print_action(A_EATING, philo) != 0)
+		rc = 1;
 	ft_usleep(philo->context->time_to_eat * 1000);
-	get_meal_count(philo, &meal_count);
-	set_meal_count(philo, meal_count + 1);
-	pthread_mutex_unlock(&first_fork->mutex);
-	pthread_mutex_unlock(&second_fork->mutex);
-	return (0);
+	if (print_action(A_SLEEPING, philo) != 0)
+		rc = 1;
+	pthread_mutex_unlock(&philo->forks[0]->mutex);
+	pthread_mutex_unlock(&philo->forks[1]->mutex);
+	return (rc);
 }
 
-static int	grab_forks(t_philo *philo, t_fork *first_fork, t_fork *second_fork)
+static int	grab_forks(t_philo *philo)
 {
-	long	time;
-
-	if (pthread_mutex_lock(&first_fork->mutex) != 0)
+	if (pthread_mutex_lock(&philo->forks[0]->mutex) != 0)
 		return (1);
-	time = time_now();
-	print_action(A_FORK, time, philo);
-	if (second_fork == first_fork
-		|| pthread_mutex_lock(&second_fork->mutex) != 0)
+	if (print_action(A_FORK, philo) != 0
+		|| &philo->forks[1]->mutex == &philo->forks[0]->mutex 
+		|| pthread_mutex_lock(&philo->forks[1]->mutex) != 0)
 	{
-		pthread_mutex_unlock(&first_fork->mutex);
+		pthread_mutex_unlock(&philo->forks[0]->mutex);
 		return (1);
 	}
-	time = time_now();
-	print_action(A_FORK, time, philo);
+	print_action(A_FORK, philo);
 	return (0);
 }
