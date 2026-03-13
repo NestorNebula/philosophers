@@ -12,6 +12,10 @@
 
 #include <pthread.h>
 #include "philo.h"
+#include "utils.h"
+
+static void	init_philo_forks(t_philo *philo, unsigned int number,
+		t_master *philo_master);
 
 int	init_philo(t_philo *philo, unsigned int number, t_master *philo_master)
 {
@@ -23,11 +27,7 @@ int	init_philo(t_philo *philo, unsigned int number, t_master *philo_master)
 	philo->number = number;
 	philo->last_meal = philo_master->context.start;
 	philo->meal_count = 0;
-	philo->forks[0] = &philo_master->forks[number - 1];
-	if (number == philo_master->philos_size)
-		philo->forks[1] = &philo_master->forks[0];
-	else
-		philo->forks[1] = &philo_master->forks[number];
+	init_philo_forks(philo, number, philo_master);
 	philo->context = &philo_master->context;
 	if (pthread_mutex_lock(&philo->context->mutex) != 0)
 		return (1);
@@ -47,4 +47,22 @@ int	clear_philo(t_philo *philo)
 	pthread_join(philo->thread, NULL);
 	pthread_mutex_destroy(&philo->mutex);
 	return (0);
+}
+
+static void	init_philo_forks(t_philo *philo, unsigned int number,
+		t_master *philo_master)
+{
+	t_fork	*tmp;
+
+	philo->forks[0] = &philo_master->forks[number - 1];
+	if (number == philo_master->philos_size)
+		philo->forks[1] = &philo_master->forks[0];
+	else
+		philo->forks[1] = &philo_master->forks[number];
+	if (number % 2 == 0)
+	{
+		tmp = philo->forks[0];
+		philo->forks[0] = philo->forks[1];
+		philo->forks[1] = tmp;
+	}
 }
