@@ -110,7 +110,8 @@ $(CUT):
 
 %.out: %.c $(CUT) $(OBJS)
 	$(AR) $(ARFLAGS) libphilo.a $(OBJS)
-	$(CC) $(CFLAGS) $< -o $@ $(IFLAGS) -I$(CUT_INC_DIR) -L$(CUT_DIR) -L. -lcut -lphilo
+	$(CC) $(CFLAGS) $< -o $@ $(IFLAGS) -I$(CUT_INC_DIR) -L$(CUT_DIR) \
+		-L. -lcut -lphilo
 
 test: $(TEST_EXECS)
 	@for test in $(TEST_EXECS) ; do \
