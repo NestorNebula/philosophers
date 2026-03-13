@@ -18,32 +18,33 @@
 #include <unistd.h>
 #include "utils.h"
 
-int	int_from_str(const char *str, int *int_ptr)
+int		int_from_str(const char *str, bool *err)
 {
 	uint64_t	nbr;
 	bool		is_negative;
 
-	if (str == NULL)
-		return (1);
+	if (str == NULL || err == NULL)
+	{
+		*err = true;
+		return (0);
+	}
 	while (*str == ' ' || *str == '\t')
 		str++;
 	is_negative = *str == '-';
 	if (*str == '-' || *str == '+')
 		str++;
 	if (!is_digit(*str))
-		return (1);
+		*err = true;
 	nbr = 0;
 	while (is_digit(*str) && nbr <= (uint64_t) INT_MAX - !is_negative)
 		nbr = nbr * 10 + (*str++ - '0');
 	while (*str == ' ' || *str == '\t')
 		str++;
 	if (*str != '\0' || nbr > (uint64_t) INT_MAX - !is_negative)
-		return (1);
-	if (int_ptr != NULL && is_negative)
-		*int_ptr = -nbr;
-	else if (int_ptr != NULL)
-		*int_ptr = nbr;
-	return (0);
+		*err = true;
+	if (is_negative)
+		return (-nbr);
+	return (nbr);
 }
 
 int	is_digit(int c)
