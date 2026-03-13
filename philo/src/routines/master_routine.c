@@ -10,11 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "context.h"
 #include "master.h"
 #include "utils.h"
-
-#include <stdio.h>
 
 static int	check_philos(t_master *master);
 
@@ -23,16 +22,15 @@ static int	check_philo(t_master *master, t_philo *philo, size_t *reached);
 void	*master_routine(void *arg)
 {
 	t_master	*master;
-	bool		running;
 
 	master = arg;
 	if (master == NULL)
 		return (NULL);
-	while (get_running(&master->context, &running) == 0 && running)
-	{
-		if (check_philos(master) != 0)
-			set_running(&master->context, false);
-	}
+	if (master->context.meal_target == -1)
+		ft_usleep(master->context.time_to_die * 1000);
+	while (check_philos(master) == 0)
+			ft_usleep(1000);
+	set_running(&master->context, false);
 	return (NULL);
 }
 
@@ -56,15 +54,13 @@ static int	check_philos(t_master *master)
 static int	check_philo(t_master *master, t_philo *philo, size_t *reached)
 {
 	size_t	meal_count;
-	long	time;
 	long	last_meal;
 
 	get_last_meal(philo, &last_meal);
 	get_meal_count(philo, &meal_count);
-	time = time_now();
-	if (time - last_meal > master->context.time_to_die * 1000)
+	if (time_now() - last_meal > master->context.time_to_die * 1000)
 	{
-		print_action(A_DIED, time, philo);
+		print_action(A_DIED, philo);
 		return (1);
 	}
 	if (master->context.meal_target > 0
