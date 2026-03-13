@@ -109,4 +109,12 @@ int		set_meal_count(t_philo *philo, size_t meal_count);
  */
 int		get_meal_count(t_philo *philo, size_t *meal_count);
 
+/**
+ * Increases a philo's meal count by 1 and updates their last meal
+ * 
+ * @param philo A pointer to a philo structure
+ * @return 0 on success, > 0 on error
+ */
+int		increase_meal_count(t_philo *philo);
+
 #endif // !PHILO_H
