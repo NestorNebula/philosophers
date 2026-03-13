@@ -10,98 +10,43 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include <pthread.h>
+#include <stdio.h>
 #include "utils.h"
 
-#define MAX_MSG_LEN 100
-#define MAX_LONG_LEN 20
+static void	set_action_msg(t_action action, char **msg);
 
-static void	str_from_long(long l, char *str);
-
-static void	copy_string(char *dest, const char *src);
-
-static int	copy_action(t_action action, char *msg);
-
-int	print_action(t_action action, long time, t_philo *philo)
+int	print_action(t_action action, t_philo *philo)
 {
-	char	msg[MAX_MSG_LEN + 1];
-	size_t	msg_len;
-	bool	running;
+	char	*msg;
+	int		rc;
 
 	if (philo == NULL)
 		return (1);
-	msg_len = 0;
-	msg[msg_len] = '\0';
-	str_from_long((time - philo->context->start) / 1000, msg + msg_len);
-	while (msg[msg_len] != '\0')
-		msg_len++;
-	msg[msg_len++] = ' ';
-	str_from_long(philo->number, msg + msg_len);
-	while (msg[msg_len] != '\0')
-		msg_len++;
-	if (copy_action(action, msg + msg_len) != 0)
+	if (pthread_mutex_lock(&philo->context->mutex) != 0)
 		return (1);
-	while (msg[msg_len] != '\0')
-		msg_len++;
-	get_running(philo->context, &running);
-	if (running)
-		return (write(STDOUT_FILENO, msg, msg_len) != (int) msg_len);
-	return (0);
+	msg = NULL;
+	set_action_msg(action, &msg);
+	if (msg && philo->context->running)
+		printf("%ld %d %s\n", (time_now() - philo->context->start) / 1000,
+			philo->number, msg);
+	if (action == A_DIED)
+		philo->context->running = false;
+	rc = philo->context->running == false;
+	pthread_mutex_unlock(&philo->context->mutex);
+	return (rc);
 }
 
-static void	str_from_long(long l, char *str)
-{
-	char	nbr_str[MAX_LONG_LEN + 1];
-	size_t	nbr_str_len;
-
-	if (l == 0)
-	{
-		*str++ = '0';
-		*str = '\0';
-		return ;
-	}
-	nbr_str_len = 0;
-	if (l < 0)
-		*str++ = '-';
-	while (l != 0)
-	{
-		nbr_str[nbr_str_len++] = '0' + (l % 10);
-		l /= 10;
-	}
-	while (nbr_str_len-- > 0)
-		*str++ = nbr_str[nbr_str_len];
-	*str = '\0';
-	return ;
-}
-
-static void	copy_string(char *dest, const char *src)
-{
-	size_t	i;
-
-	if (src == NULL || dest == NULL)
-		return ;
-	i = 0;
-	while (src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-}
-
-static int	copy_action(t_action action, char *msg)
+static void	set_action_msg(t_action action, char **msg)
 {
 	if (action == A_FORK)
-		copy_string(msg, " has taken a fork\n");
+		*msg = "has taken a fork";
 	else if (action == A_EATING)
-		copy_string(msg, " is eating\n");
+		*msg = "is eating";
 	else if (action == A_SLEEPING)
-		copy_string(msg, " is sleeping\n");
+		*msg = "is sleeping";
 	else if (action == A_THINKING)
-		copy_string(msg, " is thinking\n");
+		*msg = "is thinking";
 	else if (action == A_DIED)
-		copy_string(msg, " died\n");
-	else
-		return (1);
-	return (0);
+		*msg = "died";
 }
