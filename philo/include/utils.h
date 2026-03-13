@@ -6,12 +6,14 @@
 /*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 10:49:21 by nhoussie          #+#    #+#             */
-/*   Updated: 2026/03/13 09:18:55 by nhoussie         ###   ########.fr       */
+/*   Updated: 2026/03/13 16:28:28 by nhoussie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
+
+# include <stdbool.h>
 
 /**
  * Reads an integer from a string.

@@ -6,7 +6,7 @@
 /*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 12:57:50 by nhoussie          #+#    #+#             */
-/*   Updated: 2026/03/10 09:03:33 by nhoussie         ###   ########.fr       */
+/*   Updated: 2026/03/13 16:28:06 by nhoussie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,24 +90,6 @@ int		set_last_meal(t_philo *philo, long last_meal);
  * @return 0 on success, > 0 on error
  */
 int		get_last_meal(t_philo *philo, long *last_meal);
-
-/**
- * Sets a philo's meal count to the given value.
- *
- * @param philo A pointer to a philo structure
- * @param meal_count The value to set
- * @return 0 on success, > on error
- */
-int		set_meal_count(t_philo *philo, size_t meal_count);
-
-/**
- * Gets a philo's meal count.
- *
- * @param philo A pointer to a philo structure
- * @param meal_count A pointer to a variable where the value can be stored
- * @return 0 on success, > 0 on error
- */
-int		get_meal_count(t_philo *philo, size_t *meal_count);
 
 /**
  * Increases a philo's meal count by 1.

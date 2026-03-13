@@ -40,6 +40,16 @@ int	init_context(t_context *context, size_t args_size, char **args)
 	return (pthread_mutex_init(&context->mutex, NULL));
 }
 
+int	get_start(t_context *context, long *start)
+{
+	if (context == NULL || start == NULL)
+		return (1);
+	if (pthread_mutex_lock(&context->mutex) != 0)
+		return (1);
+	*start = context->start;
+	return (pthread_mutex_unlock(&context->mutex));
+}
+
 int	clear_context(t_context *context)
 {
 	return (pthread_mutex_destroy(&context->mutex));

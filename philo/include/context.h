@@ -6,7 +6,7 @@
 /*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 08:26:11 by nhoussie          #+#    #+#             */
-/*   Updated: 2026/03/10 09:34:09 by nhoussie         ###   ########.fr       */
+/*   Updated: 2026/03/13 16:28:08 by nhoussie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,6 @@ int	stop_context(t_context *context);
  * @return 0 on success, > 0 on error
  */
 int	clear_context(t_context *context);
-
-/**
- * Gets a context's running status.
- *
- * @param context A pointer to a context structure
- * @param running A pointer to a variable where the value can be stored
- * @return 0 on success, > 0 on error
- */
-int	get_running(t_context *context, bool *running);
 
 /**
  * Sets a context's running status to the given value.
