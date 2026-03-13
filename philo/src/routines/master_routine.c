@@ -30,7 +30,7 @@ void	*master_routine(void *arg)
 	if (master->context.meal_target == -1)
 		ft_usleep(master->context.time_to_die * 1000);
 	while (check_philos(master) == 0)
-			ft_usleep(1000);
+		ft_usleep(1000);
 	set_running(&master->context, false);
 	return (NULL);
 }

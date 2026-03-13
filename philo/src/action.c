@@ -17,7 +17,7 @@
 
 static void	set_action_msg(t_action action, char **msg);
 
-int		act(t_action action, t_philo *philo)
+int	act(t_action action, t_philo *philo)
 {
 	int		rc;
 	char	*msg;

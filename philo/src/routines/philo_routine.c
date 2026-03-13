@@ -82,7 +82,7 @@ static int	grab_forks(t_philo *philo)
 	if (pthread_mutex_lock(&philo->forks[0]->mutex) != 0)
 		return (1);
 	if (act(A_FORK, philo) != 0
-		|| &philo->forks[1]->mutex == &philo->forks[0]->mutex 
+		|| &philo->forks[1]->mutex == &philo->forks[0]->mutex
 		|| pthread_mutex_lock(&philo->forks[1]->mutex) != 0)
 	{
 		pthread_mutex_unlock(&philo->forks[0]->mutex);

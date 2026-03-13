@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include "utils.h"
 
-int		int_from_str(const char *str, bool *err)
+int	int_from_str(const char *str, bool *err)
 {
 	uint64_t	nbr;
 	bool		is_negative;

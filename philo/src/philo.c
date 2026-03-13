@@ -14,7 +14,7 @@
 #include "philo.h"
 
 static void	init_philo_forks(t_philo *philo, unsigned int number,
-		t_master *philo_master);
+				t_master *philo_master);
 
 int	init_philo(t_philo *philo, unsigned int number, t_master *philo_master)
 {
@@ -48,7 +48,7 @@ int	clear_philo(t_philo *philo)
 	return (0);
 }
 
-int		increase_meal_count(t_philo *philo)
+int	increase_meal_count(t_philo *philo)
 {
 	if (philo == NULL)
 		return (1);

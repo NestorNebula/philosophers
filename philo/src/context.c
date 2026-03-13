@@ -58,7 +58,7 @@ int	clear_context(t_context *context)
 static int	init_from_args(t_context *context, size_t args_size, char **args)
 {
 	bool	err;
-	
+
 	err = false;
 	context->time_to_die = int_from_str(args[0], &err);
 	context->time_to_eat = int_from_str(args[1], &err);
