@@ -10,24 +10,13 @@ OBJ_DIR			= obj
 TEST_DIR		= test
 
 # ============== SUB-DIRECTORIES ===============================================
-GETTERS_PATH	= $(SRC_DIR)/getters
-ROUTINES_PATH	= $(SRC_DIR)/routines
-SETTERS_PATH	= $(SRC_DIR)/setters
 
 # ============== FILES =========================================================
-SRC_ROOT_FILES		= action.c context.c fork.c main.c master.c philo.c \
+SRC_ROOT_FILES		= action.c context.c fork.c main.c master.c \
+					  master_routine.c philo.c philo_routine.c setters.c \
 					  utils.c
 
-GETTERS_FILES		= context_getters.c philo_getters.c
-
-ROUTINES_FILES		= master_routine.c philo_routine.c
-
-SETTERS_FILES		= context_setters.c philo_setters.c
-
-SRCS 				= $(addprefix $(SRC_DIR)/, $(SRC_ROOT_FILES)) \
-					  $(addprefix $(GETTERS_PATH)/, $(GETTERS_FILES)) \
-					  $(addprefix $(ROUTINES_PATH)/, $(ROUTINES_FILES)) \
-					  $(addprefix $(SETTERS_PATH)/, $(SETTERS_FILES))
+SRCS 				= $(addprefix $(SRC_DIR)/, $(SRC_ROOT_FILES))
 
 OBJS_FILES			= $(SRCS_FILES:%.c=%.o)
 
