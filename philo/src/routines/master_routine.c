@@ -6,13 +6,14 @@
 /*   By: nhoussie <nhoussie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 09:34:18 by nhoussie          #+#    #+#             */
-/*   Updated: 2026/03/10 13:38:13 by nhoussie         ###   ########.fr       */
+/*   Updated: 2026/03/13 09:40:00 by nhoussie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "context.h"
 #include "master.h"
+#include "action.h"
 #include "utils.h"
 
 static int	check_philos(t_master *master);
@@ -56,11 +57,14 @@ static int	check_philo(t_master *master, t_philo *philo, size_t *reached)
 	size_t	meal_count;
 	long	last_meal;
 
-	get_last_meal(philo, &last_meal);
-	get_meal_count(philo, &meal_count);
+	if (pthread_mutex_lock(&philo->mutex) != 0)
+		return (1);
+	last_meal = philo->last_meal;
+	meal_count = philo->meal_count;
+	pthread_mutex_unlock(&philo->mutex);
 	if (time_now() - last_meal > master->context.time_to_die * 1000)
 	{
-		print_action(A_DIED, philo);
+		act(A_DIED, philo);
 		return (1);
 	}
 	if (master->context.meal_target > 0
