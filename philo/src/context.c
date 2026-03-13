@@ -13,42 +13,56 @@
 #include <pthread.h>
 #include <stdint.h>
 #include <string.h>
+#include <unistd.h>
 #include "context.h"
 #include "utils.h"
 
 #define ARGS_MIN 3
 #define ARGS_MAX 4
+#define ERR_MSG "Invalid arguments\n"
+#define ERR_MSG_LEN 18
+
+static int	init_from_args(t_context *context, size_t args_size, char **args);
 
 int	init_context(t_context *context, size_t args_size, char **args)
 {
-	int	rc;
-
 	if (context == NULL || args == NULL
 		|| args_size < ARGS_MIN || args_size > ARGS_MAX)
 		return (1);
 	memset(context, 0, sizeof(t_context));
+	if (init_from_args(context, args_size, args) != 0)
+	{
+		write(STDERR_FILENO, ERR_MSG, ERR_MSG_LEN);
+		return (1);
+	}
 	context->running = true;
 	context->start = time_now() + 100000000;
-	if (int_from_str(args[0], (int *) &context->time_to_die) != 0
-		|| int_from_str(args[1], (int *) &context->time_to_eat) != 0
-		|| int_from_str(args[2], (int *) &context->time_to_sleep) != 0)
-		return (1);
-	if (context->time_to_die <= 0 || context->time_to_eat <= 0
-		|| context->time_to_sleep <= 0)
-		return (1);
-	if (args_size == ARGS_MAX)
-	{
-		if (int_from_str(args[3], &context->meal_target) != 0
-			|| context->meal_target <= 0)
-			return (1);
-	}
-	else
-		context->meal_target = -1;
-	rc = pthread_mutex_init(&context->mutex, NULL);
-	return (rc);
+	return (pthread_mutex_init(&context->mutex, NULL));
 }
 
 int	clear_context(t_context *context)
 {
 	return (pthread_mutex_destroy(&context->mutex));
+}
+
+static int	init_from_args(t_context *context, size_t args_size, char **args)
+{
+	bool	err;
+	
+	err = false;
+	context->time_to_die = int_from_str(args[0], &err);
+	context->time_to_eat = int_from_str(args[1], &err);
+	context->time_to_sleep = int_from_str(args[2], &err);
+	if (err || context->time_to_die <= 0 || context->time_to_eat <= 0
+		|| context->time_to_sleep <= 0)
+		return (1);
+	if (args_size == ARGS_MAX)
+	{
+		context->meal_target = int_from_str(args[3], &err);
+		if (err || context->meal_target <= 0)
+			return (1);
+	}
+	else
+		context->meal_target = -1;
+	return (0);
 }
