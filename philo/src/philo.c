@@ -49,6 +49,17 @@ int	clear_philo(t_philo *philo)
 	return (0);
 }
 
+int		increase_meal_count(t_philo *philo)
+{
+	if (philo == NULL)
+		return (1);
+	if (pthread_mutex_lock(&philo->mutex) != 0)
+		return (1);
+	philo->last_meal = time_now();
+	philo->meal_count++;
+	return (pthread_mutex_unlock(&philo->mutex));
+}
+
 static void	init_philo_forks(t_philo *philo, unsigned int number,
 		t_master *philo_master)
 {
