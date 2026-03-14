@@ -52,7 +52,6 @@ static void	wait_start(t_philo *philo)
 		get_start(philo->context, &start);
 	}
 	set_last_meal(philo, start);
-	act(A_THINKING, philo);
 	if ((philo->number % 2) == 0)
 	{
 		ft_usleep(philo->context->time_to_eat * 1000 / 2);
