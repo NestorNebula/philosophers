@@ -13,8 +13,6 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <pthread.h>
-# include <stddef.h>
 # include "context.h"
 # include "fork.h"
 
@@ -72,15 +70,6 @@ int		clear_philo(t_philo *philo);
  * @return 0 on success, > on error
  */
 int		set_last_meal(t_philo *philo, long last_meal);
-
-/**
- * Gets a philo's last meal.
- *
- * @param philo A pointer to a philo structure
- * @param last_meal A pointer to a variable where the value can be stored
- * @return 0 on success, > 0 on error
- */
-int		get_last_meal(t_philo *philo, long *last_meal);
 
 /**
  * Increases a philo's meal count by 1.

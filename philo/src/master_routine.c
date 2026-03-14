@@ -10,9 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include "context.h"
-#include "master.h"
 #include "action.h"
 #include "utils.h"
 

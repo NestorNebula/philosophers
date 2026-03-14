@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <pthread.h>
 #include "philo.h"
 
 static void	init_philo_forks(t_philo *philo, unsigned int number,
