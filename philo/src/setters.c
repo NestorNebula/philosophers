@@ -14,11 +14,16 @@
 
 int	set_last_meal(t_philo *philo, long last_meal)
 {
+	long	diff;
+
 	if (philo == NULL)
 		return (1);
 	if (pthread_mutex_lock(&philo->mutex) != 0)
 		return (1);
-	philo->last_meal = last_meal;
+	diff = (last_meal - philo->context->start) / 1000
+		- (philo->last_meal - philo->context->start) / 1000;
+	if (diff < philo->context->time_to_die)
+		philo->last_meal = last_meal;
 	return (pthread_mutex_unlock(&philo->mutex));
 }
 
