@@ -22,7 +22,6 @@ int	init_philo(t_philo *philo, unsigned int number, t_master *philo_master)
 
 	if (philo == NULL || philo_master == NULL || number == 0)
 		return (1);
-	philo->state = IS_THINKING;
 	philo->number = number;
 	philo->last_meal = philo_master->context.start;
 	philo->meal_count = 0;
