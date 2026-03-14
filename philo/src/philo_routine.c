@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include "action.h"
-#include "philo.h"
 #include "utils.h"
 
 static void	wait_start(t_philo *philo);

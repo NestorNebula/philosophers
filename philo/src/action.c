@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <pthread.h>
 #include <stdio.h>
 #include "action.h"
 #include "utils.h"
