@@ -18,18 +18,9 @@
 # include "context.h"
 # include "fork.h"
 
-typedef enum e_state
-{
-	IS_EATING,
-	IS_SLEEPING,
-	IS_THINKING,
-	IS_DEAD,
-}	t_state;
-
 typedef struct s_philo
 {
 	pthread_t		thread;
-	t_state			state;
 	unsigned int	number;
 	long			last_meal;
 	size_t			meal_count;
