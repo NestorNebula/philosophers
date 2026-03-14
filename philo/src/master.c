@@ -24,6 +24,9 @@ static int	init_from_args(t_master *master, char **args);
 
 static int	init_philos_and_forks(t_master *master);
 
+static void	clear_philos_and_forks(t_master *master, size_t philos_count,
+				size_t forks_count);
+
 int	init_master(t_master *master, size_t args_size, char **args)
 {
 	long	time;
@@ -55,14 +58,7 @@ int	init_master(t_master *master, size_t args_size, char **args)
 
 int	clear_master(t_master *master)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < master->philos_size)
-		clear_philo(&master->philos[i++]);
-	i = 0;
-	while (i < master->philos_size)
-		clear_fork(&master->forks[i++]);
+	clear_philos_and_forks(master, master->philos_size, master->philos_size);
 	clear_context(&master->context);
 	free(master->philos);
 	free(master->forks);
@@ -92,22 +88,32 @@ static int	init_philos_and_forks(t_master *master)
 	while (i < master->philos_size && !err)
 	{
 		if (init_philo(&master->philos[i], i + 1, master) != 0)
+		{
 			err = true;
+			clear_philos_and_forks(master, i, i);
+		}
 		else if (init_fork(&master->forks[i]) != 0)
 		{
 			err = true;
-			clear_philo(&master->philos[i]);
+			clear_philos_and_forks(master, i + 1, i);
 		}
-		else
-			i++;
+		i++;
 	}
 	if (!err)
 		return (0);
 	set_running(&master->context, false);
-	while (i-- > 0)
-	{
-		clear_philo(&master->philos[i]);
-		clear_fork(&master->forks[i]);
-	}
 	return (err);
+}
+
+static void	clear_philos_and_forks(t_master *master, size_t philos_count,
+				size_t forks_count)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < philos_count)
+		clear_philo(&master->philos[i++]);
+	i = 0;
+	while (i < forks_count)
+		clear_fork(&master->forks[i++]);
 }
