@@ -46,7 +46,10 @@ int	get_start(t_context *context, long *start)
 		return (1);
 	if (pthread_mutex_lock(&context->mutex) != 0)
 		return (1);
-	*start = context->start;
+	if (context->running)
+		*start = context->start;
+	else
+		*start = -1;
 	return (pthread_mutex_unlock(&context->mutex));
 }
 
