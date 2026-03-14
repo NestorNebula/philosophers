@@ -45,6 +45,7 @@ int	init_master(t_master *master, size_t args_size, char **args)
 	{
 		free(master->philos);
 		free(master->forks);
+		clear_context(&master->context);
 		return (1);
 	}
 	time = time_now();
@@ -102,6 +103,7 @@ static int	init_philos_and_forks(t_master *master)
 	}
 	if (!err)
 		return (0);
+	set_running(&master->context, false);
 	while (i-- > 0)
 	{
 		clear_philo(&master->philos[i]);
