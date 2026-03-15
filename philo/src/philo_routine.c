@@ -31,7 +31,7 @@ void	*philo_routine(void *arg)
 	wait_start(philo);
 	running = true;
 	time_to_think = (philo->context->time_to_die
-		- (philo->context->time_to_eat + philo->context->time_to_sleep))
+			- (philo->context->time_to_eat + philo->context->time_to_sleep))
 		/ 2 * 1000;
 	while (running && philo_eat(philo) == 0)
 	{
