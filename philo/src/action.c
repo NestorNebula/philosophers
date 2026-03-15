@@ -29,8 +29,8 @@ int	act(t_action action, t_philo *philo)
 	if (pthread_mutex_lock(&philo->context->mutex) != 0)
 		return (1);
 	time = time_now();
-	if (action == A_EATING)
-		set_last_meal(philo, time);
+	if (action == A_EATING && set_last_meal(philo, time) != 0)
+		msg = NULL;
 	if (msg && philo->context->running)
 		printf("%ld %d %s\n", (time - philo->context->start) / 1000,
 			philo->number, msg);
